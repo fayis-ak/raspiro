@@ -16,11 +16,13 @@ import 'package:respiro_projectfltr/frame.dart';
 import 'package:respiro_projectfltr/general.dart';
 import 'package:respiro_projectfltr/home2.dart';
 import 'package:respiro_projectfltr/provider/firebaseprovider.dart';
+import 'package:respiro_projectfltr/provider/helper.dart';
 import 'package:respiro_projectfltr/settings/Appinfo.dart';
 import 'package:respiro_projectfltr/settings/invite.dart';
 import 'package:respiro_projectfltr/settings/notification.dart';
 import 'package:respiro_projectfltr/settings/settings.dart';
 import 'package:respiro_projectfltr/settings/settings_page.dart';
+import 'package:respiro_projectfltr/utils/toast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class home1 extends StatefulWidget {
@@ -35,18 +37,6 @@ class _demoState extends State<home1> {
   void initState() {
     super.initState();
     _handleLocationPermission();
-  }
-
-  Future latlog() async {
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-
-    setState(() {
-      lat = position.latitude;
-      lon = position.longitude;
-    });
-
-    log('user lat cehck click ${position.latitude} log ${position.longitude}  ===========================');
   }
 
   Future<bool> _handleLocationPermission() async {
@@ -194,6 +184,18 @@ class _demoState extends State<home1> {
             })));
   }
 
+  Future latlog() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    setState(() {
+      lat = position.latitude;
+      lon = position.longitude;
+    });
+
+    log('user lat cehck click ${position.latitude} log ${position.longitude}  ===========================');
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -218,48 +220,52 @@ class _demoState extends State<home1> {
                   left: 1,
                   right: 1,
                   child: Padding(
-                    padding:
-                        const EdgeInsets.only(left: 50, right: 50, top: 100),
-                    child: GestureDetector(
-                      onTap: () async {
-                        // await _handleLocationPermission();
-                        await latlog();
+                      padding:
+                          const EdgeInsets.only(left: 50, right: 50, top: 100),
+                      child: Consumer<HelperProvider>(
+                        builder: (context, value, child) {
+                          return GestureDetector(
+                            onTap: () async {
+                              // await _handleLocationPermission();
+                              await latlog();
 
-                        if (lat != null)
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Aqicheck_page(
-                                      lat: lat,
-                                      lon: lon,
-                                    )),
+                              if (lat != null)
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Aqicheck_page(
+                                            lat: lat,
+                                            lon: lon,
+                                          )),
+                                );
+                            },
+                            child: Container(
+                              height: 159,
+                              width: 360,
+                              decoration: BoxDecoration(
+                                color: HexColor("FCD594"),
+                              ),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 20, top: 33),
+                                child: Text(
+                                  "Chech Air Quality",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 32,
+                                      color: HexColor("D2891B"),
+                                      shadows: [
+                                        Shadow(
+                                            offset: Offset(5, 5),
+                                            blurRadius: 7,
+                                            color: Colors.black)
+                                      ]),
+                                ),
+                              ),
+                            ),
                           );
-                      },
-                      child: Container(
-                        height: 159,
-                        width: 360,
-                        decoration: BoxDecoration(
-                          color: HexColor("FCD594"),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 20, top: 33),
-                          child: Text(
-                            "Chech Air Quality",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 32,
-                                color: HexColor("D2891B"),
-                                shadows: [
-                                  Shadow(
-                                      offset: Offset(5, 5),
-                                      blurRadius: 7,
-                                      color: Colors.black)
-                                ]),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                        },
+                      )),
                 ),
                 CustomRound(),
                 Padding(
@@ -325,27 +331,30 @@ class _demoState extends State<home1> {
                     width: 9,
                   ),
                   Container(
-                      height: 149,
-                      width: 149,
-                      decoration: BoxDecoration(
-                        color: HexColor("F4EAB6"),
-                        borderRadius: BorderRadius.circular(15),
+                    height: 149,
+                    width: 149,
+                    decoration: BoxDecoration(
+                      color: HexColor("F4EAB6"),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Center(
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => General_page()));
+                        },
+                        child: Text(
+                          "General",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 32,
+                              color: HexColor("D2891B")),
+                        ),
                       ),
-                      child: Center(
-                          child: TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => General_page()));
-                              },
-                              child: Text(
-                                "General",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 32,
-                                    color: HexColor("D2891B")),
-                              ))))
+                    ),
+                  )
                 ],
               ),
             ),

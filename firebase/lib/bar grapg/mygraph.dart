@@ -21,14 +21,19 @@ class BarChartExample extends StatelessWidget {
         SO3: airquality[5]);
     mybardats.initializeBarData();
 
-    return BarChart(BarChartData(
-        maxY: 500,
+    return BarChart(
+      BarChartData(
+        maxY: 600,
         minY: 0,
         barGroups: mybardats.barData
             .map((data) => BarChartGroupData(
                   x: data.x,
-                  barRods: [BarChartRodData(toY: data.y)],
+                  barRods: [
+                    BarChartRodData(toY: data.y),
+                  ],
                 ))
-            .toList()));
+            .toList(),
+      ),
+    );
   }
 }

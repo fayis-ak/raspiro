@@ -1,5 +1,5 @@
 class individualBar {
-  final dynamic x;
+  dynamic x;
   double y;
   individualBar({required this.x, required this.y});
 }

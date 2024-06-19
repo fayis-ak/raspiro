@@ -138,71 +138,75 @@ class _AqipageState extends State<Aqipage> {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Container(
-                    height: 129,
-                    width: 335,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: HexColor("F4EAB6"),
-                    ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 15),
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 15),
-                                child: Container(
-                                  height: 75,
-                                  width: 75,
-                                  color: Colors.black12,
-                                  child: Image.asset("assets/images/res.jpg"),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 15),
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => graph()),
-                                    );
-                                  },
-                                  child: const Text(
-                                    "Polluted Cities",
-                                    style: TextStyle(
-                                        color: Colors.brown,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 22),
-                                  ),
-                                  style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              HexColor("F4BE6D"))),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            left: 80,
-                          ),
-                          child: Text(
-                            "Graph",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black.withOpacity(0.5)),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+                // Padding(
+                //   padding: const EdgeInsets.all(15),
+                //   child: Container(
+                //     height: 129,
+                //     width: 335,
+                //     decoration: BoxDecoration(
+                //       borderRadius: BorderRadius.circular(12),
+                //       color: HexColor("F4EAB6"),
+                //     ),
+                //     child: Column(
+                //       children: [
+                //         Padding(
+                //           padding: const EdgeInsets.only(top: 15),
+                //           child: Row(
+                //             children: [
+                //               Padding(
+                //                 padding: const EdgeInsets.only(left: 15),
+                //                 child: Container(
+                //                   height: 75,
+                //                   width: 75,
+                //                   color: Colors.black12,
+                //                   child: Image.asset("assets/images/res.jpg"),
+                //                 ),
+                //               ),
+                //               Padding(
+                //                 padding: const EdgeInsets.only(left: 15),
+                //                 child: ElevatedButton(
+                //                   onPressed: () {
+                //                     Navigator.push(
+                //                       context,
+                //                       MaterialPageRoute(
+                //                           builder: (context) => graph()),
+                //                     );
+                //                   },
+                //                   child: const Text(
+                //                     "Polluted Cities",
+                //                     style: TextStyle(
+                //                         color: Colors.brown,
+                //                         fontWeight: FontWeight.bold,
+                //                         fontSize: 22),
+                //                   ),
+                //                   style: ButtonStyle(
+                //                       backgroundColor:
+                //                           MaterialStateProperty.all(
+                //                               HexColor("F4BE6D"))),
+                //                 ),
+                //               ),
+                //             ],
+                //           ),
+                //         ),
+                //         Padding(
+                //           padding: const EdgeInsets.only(
+                //             left: 80,
+                //           ),
+                //           child: Text(
+                //             "Graph",
+                //             style: TextStyle(
+                //                 fontSize: 18,
+                //                 fontWeight: FontWeight.bold,
+                //                 color: Colors.black.withOpacity(0.5)),
+                //           ),
+                //         )
+                //       ],
+                //     ),
+                //   ),
+                // ),
+
+                SizedBox(
+                  height: 20,
                 ),
                 Padding(
                   padding: const EdgeInsets.all(1),

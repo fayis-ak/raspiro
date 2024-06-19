@@ -90,6 +90,67 @@ class _Ad_GeneralState extends State<Ad_General> {
     }
   }
 
+  String? selectedelemet2;
+
+  final storage2 = FirebaseStorage.instance;
+  String imageurl2 = '';
+  XFile? pickedFile2;
+  File? image2;
+  Uint8List webimage2 = Uint8List(8);
+
+  Future<void> pickedimagesecond(BuildContext context) async {
+    String url2;
+    final now = DateTime.now();
+    final ImagePicker picker = ImagePicker();
+
+    try {
+      if (kIsWeb) {
+        final XFile? returnimage =
+            await picker.pickImage(source: ImageSource.gallery);
+        if (returnimage != null) {
+          var f = await returnimage.readAsBytes();
+          webimage2 = f;
+
+          UploadTask uploadTask = storage2
+              .ref('advice/$now')
+              .putData(webimage2, SettableMetadata(contentType: 'image/jpeg'));
+          TaskSnapshot snapshot = await uploadTask;
+          url2 = await snapshot.ref.getDownloadURL();
+          imageurl2 = url2;
+          setState(() {});
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error picking image')),
+          );
+        }
+      } else {
+        final XFile? returnimage =
+            await picker.pickImage(source: ImageSource.gallery);
+        if (returnimage != null) {
+          image = File(returnimage.path);
+
+          UploadTask uploadTask = storage
+              .ref('diseases/$now')
+              .putFile(image!, SettableMetadata(contentType: 'image/jpeg'));
+          TaskSnapshot snapshot = await uploadTask;
+          url2 = await snapshot.ref.getDownloadURL();
+          imageurl = url2;
+          setState(() {});
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error picking image')),
+          );
+        }
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    }
+  }
+
+  final link = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -602,28 +663,68 @@ class _Ad_GeneralState extends State<Ad_General> {
                           ),
                         ],
                       ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GestureDetector(
+                          onTap: () async {
+                            await pickedimagesecond(context);
+                          },
+                          child: Container(
+                            height: 110,
+                            width: 180,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: const Color.fromARGB(255, 133, 112, 112),
+                              // image: DecorationImage(
+                              //     ima)
+                            ),
+                            child: Icon(Icons.add),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      SizedBox(
+                        width: 200,
+                        height: 100,
+                        child: TextFormField(
+                          controller: link,
+                          decoration: InputDecoration(
+                            hintText: 'Add link',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Consumer<Firebaseprovider>(
+                        builder: (context, instance, child) {
+                          return GestureDetector(
+                            onTap: () async {
+                              if (instance.news != null && imageurl2 != null) {
+                                await instance.addNews(NewsModel(
+                                  News: instance.news.text,
+                                  image: imageurl2,
+                                  link: link.text,
+                                ));
+                                Toast().succestoas(context, 'add news');
+                              }
+                            },
+                            child: Container(
+                              color: Colors.blue,
+                              width: 110,
+                              height: 40,
+                              child: Text('Add news'),
+                            ),
+                          );
+                        },
+                      ),
                     ],
                   ),
                   SizedBox(
                     height: 180,
-                  ),
-                  Consumer<Firebaseprovider>(
-                    builder: (context, instance, child) {
-                      return GestureDetector(
-                        onTap: () async {
-                          await instance.addNews(NewsModel(
-                            News: instance.news.text,
-                          ));
-                          Toast().succestoas(context, 'add news');
-                        },
-                        child: Container(
-                          color: Colors.blue,
-                          width: 110,
-                          height: 40,
-                          child: Text('Add news'),
-                        ),
-                      );
-                    },
                   ),
                 ],
               ),

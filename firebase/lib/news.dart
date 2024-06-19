@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -16,6 +19,7 @@ import 'package:respiro_projectfltr/custom_round.dart';
 
 import 'package:respiro_projectfltr/frame.dart';
 import 'package:respiro_projectfltr/provider/firebaseprovider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class news_page extends StatefulWidget {
   int indexnumber = 0;
@@ -29,30 +33,20 @@ class news_page extends StatefulWidget {
 class _News_pageState extends State<news_page> {
   @override
   Widget build(BuildContext context) {
-    // final List _diseaseslist = ["Asthma", "COPD", "Stroke", "Skin"];
-    List _newslist = [
-      {
-        'title': 'Delhi Struggles to Breathe Again:',
-        'img': 'images/news1.jpg',
-        'date': '3 month '
-      },
-      {
-        'title': 'Pollution Problem Go...',
-        'img': 'images/news1.png',
-        'date': '3 month '
-      },
-      {
-        'title': 'Pollution Problem Go...',
-        'img': 'images/news2.png',
-        'date': '3 month '
-      },
-    ];
-
     final _pages = [
       const Asthmapage(),
       const COPD_page(),
       const Pneumonia_page(),
     ];
+    Future<void> _launchYoutube(String videoId) async {
+      final String url = 'youtube://watch?v=$videoId';
+      if (await canLaunchUrl(Uri.parse(url))) {
+        await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+      } else {
+        final webUrl = 'https://www.youtube.com/watch?v=$videoId';
+        await launchUrl(Uri.parse(webUrl));
+      }
+    }
 
     return Scaffold(
       body: Column(
@@ -82,10 +76,19 @@ class _News_pageState extends State<news_page> {
               return FutureBuilder(
                   future: instance.getNews(),
                   builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
                     final data = instance.newslist;
+
                     return ListView.builder(
                       itemCount: data.length,
                       itemBuilder: (context, index) {
+                        log(data[index].image);
+
                         return GestureDetector(
                           onTap: () {
                             // switch (index) {
@@ -114,27 +117,41 @@ class _News_pageState extends State<news_page> {
                             child: Row(
                               children: [
                                 Padding(
-                                  padding: EdgeInsets.only(left: 12),
-                                  child: CircleAvatar(
-                                    radius: 35,
-                                    backgroundImage: AssetImage(
-                                      '${_newslist[index]['img']}',
-                                    ),
-                                  ),
-                                ),
+                                    padding: EdgeInsets.only(left: 12),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        _launchYoutube(data[index].link);
+                                      },
+                                      child: Container(
+                                        width: 80,
+                                        height: 80,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(),
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
+                                            image: NetworkImage(
+                                              data[index].image,
+                                            ),
+                                          ),
+                                          // color: Colors.red,/
+                                        ),
+                                      ),
+                                    )),
                                 const SizedBox(
                                   width: 12,
                                 ),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text(
-                                      data[index].News,
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                    Text(
-                                      '3',
-                                      style: const TextStyle(fontSize: 16),
+                                    GestureDetector(
+                                      onTap: () {
+                                        _launchYoutube(
+                                            'https://youtu.be/fP4AMHY6tk8?si=O9IZON-uCUzUbRFf');
+                                      },
+                                      child: Text(
+                                        data[index].News,
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
                                     ),
                                   ],
                                 )

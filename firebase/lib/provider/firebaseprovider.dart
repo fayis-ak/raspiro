@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:respiro_projectfltr/Advices/Advices.dart';
 import 'package:respiro_projectfltr/model/advice.dart';
 import 'package:respiro_projectfltr/model/diseasesmodel.dart';
 import 'package:respiro_projectfltr/model/news.dart';
@@ -94,6 +96,15 @@ class Firebaseprovider with ChangeNotifier {
     }).toList();
   }
 
+  List<AdwiseModel> adv = [];
+  Future getAdvide() async {
+    final snapshot = await db.collection('advice').get();
+
+    adv = snapshot.docs.map((e) {
+      return AdwiseModel.fromjson(e.data());
+    }).toList();
+  }
+
   Usermodel? usermodel;
   Future getuser(uid) async {
     final snapshot = await await db
@@ -102,19 +113,6 @@ class Firebaseprovider with ChangeNotifier {
         .get();
 
     usermodel = Usermodel.fromJson(snapshot.docs.first.data());
-  }
-
-  List<DiseasesModel> co = [];
-
-  Future getdiseases(isequl) async {
-    final snapshot = await db
-        .collection('Diseases')
-        .where('element', isEqualTo: isequl)
-        .get();
-
-    co = snapshot.docs.map((e) {
-      return DiseasesModel.fromJson(e.data());
-    }).toList();
   }
 
   // List<Usermodel> allusermodel = [];
@@ -161,4 +159,66 @@ class Firebaseprovider with ChangeNotifier {
     obscure = !obscure;
     notifyListeners();
   }
+
+  List<DiseasesModel> co = [];
+
+  Future getdiseases() async {
+    final snapshot = await db.collection('Diseases').get();
+
+    co = snapshot.docs.map((e) {
+      return DiseasesModel.fromJson(e.data());
+    }).toList();
+  }
+
+  List<DiseasesModel> listOfDisieses = [];
+  Future checkValues(WetherModel weathermodel) async {
+    listOfDisieses = [];
+    log(weathermodel.toString());
+    getdiseases();
+
+    if (weathermodel.co > 20) {
+      for (var i in co) {
+        if (i.element == "co") {
+          listOfDisieses.add(i);
+        }
+      }
+    }
+    if (weathermodel.no2 > 20) {
+      for (var i in co) {
+        if (i.element == "no2") {
+          listOfDisieses.add(i);
+        }
+      }
+    }
+    if (weathermodel.pm25 > 20) {
+      for (var i in co) {
+        if (i.element == "pm2.5") {
+          listOfDisieses.add(i);
+        }
+      }
+    }
+    if (weathermodel.s02 > 20) {
+      for (var i in co) {
+        if (i.element == "so2") {
+          listOfDisieses.add(i);
+        }
+      }
+    }
+    if (weathermodel.o3 > 20) {
+      for (var i in co) {
+        if (i.element == "o3") {
+          listOfDisieses.add(i);
+        }
+      }
+    }
+    if (weathermodel.pm10 > 20) {
+      for (var i in co) {
+        if (i.element == "pm_10") {
+          listOfDisieses.add(i);
+        }
+      }
+    }
+  }
+
+  WetherModel? wetherModel;
 }

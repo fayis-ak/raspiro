@@ -18,20 +18,20 @@ import 'package:respiro_projectfltr/provider/firebaseprovider.dart';
 import 'package:respiro_projectfltr/provider/helper.dart';
 import 'package:respiro_projectfltr/response.dart/res.dart';
 
-class Aqicheck_page extends StatefulWidget {
+class AdminAqicheck extends StatefulWidget {
   double? lat;
   double? lon;
-  Aqicheck_page({
+  AdminAqicheck({
     super.key,
     this.lat,
     this.lon,
   });
 
   @override
-  State<Aqicheck_page> createState() => _Aqicheck_pageState();
+  State<AdminAqicheck> createState() => _AdminAqicheckState();
 }
 
-class _Aqicheck_pageState extends State<Aqicheck_page> {
+class _AdminAqicheckState extends State<AdminAqicheck> {
   // late Future<void> _loctationfutur;
 
   // final WeatherRepositry weatherRepositry =
@@ -53,7 +53,8 @@ class _Aqicheck_pageState extends State<Aqicheck_page> {
     final helper = Provider.of<HelperProvider>(context);
     return DefaultTabController(
       length: 2,
-      child: Scaffold(body: SingleChildScrollView(
+      child: Scaffold(
+        body: SingleChildScrollView(
         child:
             Consumer<WetherDataProvider>(builder: (context, provider, child) {
           return FutureBuilder(
