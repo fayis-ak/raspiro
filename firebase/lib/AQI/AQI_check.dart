@@ -32,11 +32,7 @@ class Aqicheck_page extends StatefulWidget {
 }
 
 class _Aqicheck_pageState extends State<Aqicheck_page> {
-  // late Future<void> _loctationfutur;
-
-  // final WeatherRepositry weatherRepositry =
-  //     WeatherRepositry(wetherDataProvider: WetherDataProvider());
-
+   
   WetherModel? model;
 
   List<double> airquality = [
